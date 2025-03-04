@@ -58,6 +58,13 @@ int main (int argc, char **argv)
         return -1;
     }
     printf("CLIENTE: después de modify_value");
+    printf("CLIENTE: Clave %d obtenida correctamente\n", key);
+    printf("Value1: %s\n", value1);
+    printf("N_value2: %d\n", N_value2);
+    for (int i = 0; i < N_value2; i++) {
+        printf("V_value2[%d]: %.2f\n", i, V_value2[i]);
+    }
+    printf("Coordenadas: x = %d, y = %d\n", value3.x, value3.y);
 
     return 0;
 }

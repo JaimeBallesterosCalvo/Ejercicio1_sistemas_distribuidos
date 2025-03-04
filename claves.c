@@ -2,15 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "claves.h"
-#include <stdlib.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 
-int destroy(void);
+int destroy(void)
 {
-    /*todo esto es para poder ver si está bien lo que estamos haciendo*/
-    /*se puede de hacer de otras maneras, pero con ficheros y un cat siempre funciona*/
-    system("rm -fr ./KV");
+   system("rm -fr ./KV");
 
     int ret = mkdir("KV", 0700);
     if (ret <0){
@@ -21,54 +20,54 @@ int destroy(void);
     return 0;
 }
 
-int set_value(int key, char *value1, int N_value2, double *V_value2, struct Coord value3);
+int set_value(int key, char *value1, int N_value2, double *V_value2, struct Coord value3)
 {
     char fname[1024];
+    sprintf(fname, "./KV/%d", key); // Nombre del archivo = clave
 
-    sprintf(fname, "./KV/%d", key);
-
-    fd =fopen(fname, "w+");
-    if (NULL ==fd){ /**hay que poner toda la comprobación de errores que se puedan**/
-        printf("ERROR: fopen de %\n", fname)
+    FILE *fd = fopen(fname, "w+");
+    if (NULL == fd){
+        printf("ERROR: fopen de %s\n", fname);
+        return -1;
     }
 
+    // Escribe los valores en el archivo
     fprintf(fd, "%s\n", value1);
     fprintf(fd, "%d\n", N_value2);
-    for (int i=0; i<N_value2; i++)
+    for (int i = 0; i < N_value2; i++){
         fprintf(fd, "%le\n", V_value2[i]);
     }
     fprintf(fd, "%d\n", value3.x);
     fprintf(fd, "%d\n", value3.y);
 
     fclose(fd);
+    return 0;
 }
 
-int get_value(int key, char *value1, int *N_value2, double *V_value2, struct Coord *value3);
+
+int get_value(int key, char *value1, int *N_value2, double *V_value2, struct Coord *value3)
 {
-    /* en este caso, es parecido al de set value, pero esta vez cogera datos*/
-    /* es por ello que hace scanf en vez de printf*/
-
     char fname[1024];
-    FILE *fd;
-
     sprintf(fname, "./KV/%d", key);
 
-    fd =fopen(fname, "r+");
-    if (NULL ==fd){ /**hay que poner toda la comprobación de errores que se puedan**/
-        printf("ERROR: fopen de %\n", fname)
+    FILE *fd = fopen(fname, "r"); // Abre el archivo en modo lectura
+    if (NULL == fd){
+        printf("ERROR: fopen de %s\n", fname);
+        return -1;
     }
 
-    fscan(fd, "%s\n", value1);
-    fscan(fd, "%1023[^\n]\n", value1); /*esto es para leer varias palabras, significa que lee hasta un enter*/
-    fscan(fd, "%d\n", *N_value2);
-    for (int i=0; i<*N_value2; i++){
-        fscan(fd, "%le\n", &(V_value2[i]));
+    fscanf(fd, "%1023[^\n]\n", value1); // Lee la cadena hasta el salto de línea
+    fscanf(fd, "%d\n", N_value2); // Lee el número de elementos del vector
+    for (int i = 0; i < *N_value2; i++){
+        fscanf(fd, "%le\n", &(V_value2[i]));
     }
-    fscan(fd, "%d\n", &(value3->x) ); /*quiero acceder a este puntero al campo X*/
-    fscan(fd, "%d\n", &((*value3).y) ); /*es lo mismo pero en otra notación*/
+    fscanf(fd, "%d\n", &(value3->x));
+    fscanf(fd, "%d\n", &(value3->y));
 
     fclose(fd);
-    }
+    return 0;
+}
+
 
 int modify_value(int key, char *value1, int N_value2, double *V_value2, struct Coord value3) {
     char fname[1024];
