@@ -105,15 +105,11 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2, struct C
 int delete_key(int key) {
     char fname[1024];
 
-    // Construir el nombre del archivo correspondiente a la clave
     sprintf(fname, "./KV/%d", key);
 
-    // Intentar eliminar el archivo
     if (remove(fname) == 0) {
-        // Si se eliminó correctamente, devolver 0
         return 0;
     } else {
-        // Si no se pudo eliminar (por ejemplo, si el archivo no existe), devolver -1
         return -1;
     }
 }
@@ -122,13 +118,11 @@ int exist(int key) {
     char fname[1024];
     FILE *fd;
 
-    // Construir el nombre del archivo correspondiente a la clave
     sprintf(fname, "./KV/%d", key);
 
     // Intentar abrir el archivo en modo lectura ("r")
     fd = fopen(fname, "r");
     if (fd == NULL) {
-        // Si el archivo no existe, devolver 0 (la clave no existe)
         return 0;
     }
 
@@ -136,4 +130,4 @@ int exist(int key) {
     return 1; 
 }
 
-/*hola*/
+

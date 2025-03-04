@@ -73,6 +73,22 @@ int main (int argc, char **argv)
     }
     printf("Coordenadas: x = %d, y = %d\n", value3.x, value3.y);
 
+    /* Prueba de delete_key */
+    err = delete_key(key);
+    if (err == -1) {
+        printf("Error al eliminar la clave\n");
+        return -1;
+    }
+    printf("CLIENTE: Clave %d eliminada correctamente.\n", key);
+
+    // Verificar si la clave fue eliminada
+    err = exist(key);
+    if (err == 0) {
+        printf("La clave %d no existe.\n", key);
+    } else {
+        printf("La clave %d sigue existiendo.\n", key);
+    }
+    
     return 0;
 }
 
