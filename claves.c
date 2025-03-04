@@ -80,7 +80,7 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2, struct C
 
     sprintf(fname, "./KV/%d", key);
 
-    fd = fopen(fname, "w"); 
+    fd = fopen(fname, "r+"); 
     if (fd == NULL) {
         return -1; /*Error, no existe un elemento con dicha clave*/
     }
@@ -132,8 +132,8 @@ int exist(int key) {
         return 0;
     }
 
-    // Si el archivo se abrió correctamente, la clave existe
-    fclose(fd); // Cerrar el archivo después de verificar
-    return 1; // La clave existe
+    fclose(fd);
+    return 1; 
 }
 
+/*hola*/

@@ -57,8 +57,15 @@ int main (int argc, char **argv)
         printf("Error al modificar la tupla\n");
         return -1;
     }
-    printf("CLIENTE: después de modify_value");
-    printf("CLIENTE: Clave %d obtenida correctamente\n", key);
+    printf("CLIENTE: después de modify_value\n");
+
+    // Volver a obtener los datos después de la modificación
+    err = get_value(key, value1, &N_value2, V_value2, &value3);
+    if (err == -1) {
+        printf("Error al obtener la clave después de la modificación\n");
+        return -1;
+    }
+
     printf("Value1: %s\n", value1);
     printf("N_value2: %d\n", N_value2);
     for (int i = 0; i < N_value2; i++) {
