@@ -101,48 +101,40 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2, struct C
 
     return 0;  
 
+}
 
-/**
- * @brief Este servicio permite modificar los valores asociados a la clave key. 
- * La función devuelve 0 en caso de éxito y -1 en caso de error, por ejemplo, 
- * si no existe un elemento con dicha clave o si se produce un error en las comunicaciones. 
- * También se devolverá -1 si el valor N_value2 está fuera de rango.
- * 
- * 
- * @param key clave.
- * @param value1   valor1 [256].
- * @param N_value2 dimensión del vector V_value2 [1-32].
- * @param V_value2 vector de doubles [32].
- * @param value3   estructura Coord.
- * @return int El servicio devuelve 0 si se insertó con éxito y -1 en caso de error.
- * @retval 0 si se modificó con éxito.
- * @retval -1 en caso de error.
- */
-int modify_value(int key, char *value1, int N_value2, double *V_value2, struct Coord value3);
+int delete_key(int key) {
+    char fname[1024];
 
-/**
- * @brief Este servicio permite borrar el elemento cuya clave es key. 
- * La función devuelve 0 en caso de éxito y -1 en caso de error. 
- * En caso de que la clave no exista también se devuelve -1.
- * 
- * @param key clave.
- * @return int La función devuelve 0 en caso de éxito y -1 en caso de error.
- * @retval 0 en caso de éxito.
- * @retval -1 en caso de error.
- */
-int delete_key(int key);
+    // Construir el nombre del archivo correspondiente a la clave
+    sprintf(fname, "./KV/%d", key);
 
-/**
- * @brief Este servicio permite determinar si existe un elemento con clave key.
- * La función devuelve 1 en caso de que exista y 0 en caso de que no exista. 
- * En caso de error se devuelve -1. Un error puede ocurrir en este caso por un problema en las comunicaciones.
- * 
- * @param key clave.
- * @return int La función devuelve 1 en caso de que exista y 0 en caso de que no exista. En caso de error se devuelve -1.
- * @retval 1 en caso de que exista.
- * @retval 0 en caso de que no exista.
- * @retval -1 en caso de error.
- */
-int exist(int key);
+    // Intentar eliminar el archivo
+    if (remove(fname) == 0) {
+        // Si se eliminó correctamente, devolver 0
+        return 0;
+    } else {
+        // Si no se pudo eliminar (por ejemplo, si el archivo no existe), devolver -1
+        return -1;
+    }
+}
 
-#endif
+int exist(int key) {
+    char fname[1024];
+    FILE *fd;
+
+    // Construir el nombre del archivo correspondiente a la clave
+    sprintf(fname, "./KV/%d", key);
+
+    // Intentar abrir el archivo en modo lectura ("r")
+    fd = fopen(fname, "r");
+    if (fd == NULL) {
+        // Si el archivo no existe, devolver 0 (la clave no existe)
+        return 0;
+    }
+
+    // Si el archivo se abrió correctamente, la clave existe
+    fclose(fd); // Cerrar el archivo después de verificar
+    return 1; // La clave existe
+}
+
