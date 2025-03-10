@@ -36,7 +36,7 @@ int main( int argc, char *argv[])
         return -1;
     }
     while (1){
-        mq_receive(qs, &p, sizeof(p), &prio);
+        mq_receive(qs, (char *)&p, sizeof(p), &prio);
         tratar_peticion(&p);
     }
 }
