@@ -3,7 +3,8 @@
 #include <string.h>
 #include <mqueue.h>
 #include <unistd.h>
-#include "claves.h" // Asegúrate de que este header esté disponible
+#include "claves.h"
+#include <errno.h>
 
 #define MAX 1024
 
@@ -34,13 +35,18 @@ int proxy_operacion(int op, int key, char *value1, int N_value2, double *V_value
     // Abrir colas de mensajes
     int qs = mq_open("/SERVIDOR", O_CREAT | O_WRONLY, 0700, NULL);
     if (qs == -1) {
-        return -1; // Error al abrir la cola del servidor
+        printf("Error al abrir la cola del servidor: %s\n", strerror(errno)); // Imprimir mensaje de error
+        return -1;
     }
+    printf("PROXY: /SERVIDOR abierto correctamente\n");
+
     int qr = mq_open(qr_name, O_CREAT | O_RDONLY, 0700, NULL);
     if (qr == -1) {
+        printf("Error al abrir la cola de respuesta: %s\n", strerror(errno)); // Imprimir mensaje de error
         mq_close(qs);
-        return -1; // Error al abrir la cola de respuesta
+        return -1;
     }
+
 
     // Preparar petición
     p.op = op;
@@ -53,18 +59,21 @@ int proxy_operacion(int op, int key, char *value1, int N_value2, double *V_value
 
     // Enviar petición
     if (mq_send(qs, (char *)&p, sizeof(struct peticion), 0) == -1) {
+        printf("PROXY: Error al enviar petición: %s\n", strerror(errno));
         mq_close(qs);
         mq_close(qr);
         mq_unlink(qr_name);
         return -1; // Error al enviar la petición
     }
+    printf("PROXY: Petición enviada correctamente\n");
 
     // Recibir respuesta
     if (mq_receive(qr, (char *)&r, sizeof(struct respuesta), &prio) == -1) {
+        printf("Error al recibir la respuesta: %s\n", strerror(errno)); // Imprimir mensaje de error
         mq_close(qs);
         mq_close(qr);
         mq_unlink(qr_name);
-        return -1; // Error al recibir la respuesta
+        return -1;
     }
 
     // Cerrar y eliminar colas
@@ -79,8 +88,11 @@ int proxy_operacion(int op, int key, char *value1, int N_value2, double *V_value
 
 // Funciones proxy específicas
 int destroy() {
+    printf("PROXY: destroy() llamada\n");
     int ret_value;
-    return proxy_operacion(0, 0, "", 0, NULL, (struct Coord){0, 0}, &ret_value);
+    int result = proxy_operacion(0, 0, "", 0, NULL, (struct Coord){0, 0}, &ret_value);
+    printf("PROXY: destroy() retorna %d\n", result);
+    return result;
 }
 
 int set_value(int key, char *value1, int N_value2, double *V_value2, struct Coord coord) {

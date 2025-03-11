@@ -1,27 +1,24 @@
 CC = gcc
-CFLAGS = -g -Wall -pthread -fPIC # Añadimos -fPIC para la librería dinámica
-LDFLAGS = -lrt # Añadimos -lrt para las colas de mensajes
-CC = gcc
-CFLAGS = -g -Wall -pthread -fPIC
+CFLAGS = -g -Wall
 LDFLAGS = -lrt
+
 BIN_SERVER = servidor
 LIB_CLIENT = libclaves.so
-BIN_CLIENT = app-cliente
+BIN_CLIENT = cliente
 
 all: $(BIN_SERVER) $(LIB_CLIENT) $(BIN_CLIENT)
 
 $(BIN_SERVER): servidor-mq.o claves.o
-		$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+		$(CC) $(CFLAGS) servidor-mq.o claves.o -o $(BIN_SERVER) $(LDFLAGS)
 
 $(LIB_CLIENT): proxy-mq.o
-		$(CC) -shared $(CFLAGS) $< -o $@ $(LDFLAGS)
+		$(CC) -shared $(CFLAGS) -fPIC proxy-mq.o -o $(LIB_CLIENT) $(LDFLAGS)
 
 $(BIN_CLIENT): app-cliente.o $(LIB_CLIENT)
-		$(CC) $(CFLAGS) app-cliente.o -L. -lclaves -o $@ $(LDFLAGS)
+		$(CC) $(CFLAGS) app-cliente.o -L. -lclaves -o $(BIN_CLIENT) $(LDFLAGS) -Wl,-rpath,.
 
 %.o: %.c
 		$(CC) $(CFLAGS) -c $<
 
 clean:
 		rm -f $(BIN_SERVER) $(LIB_CLIENT) $(BIN_CLIENT) *.o
-
