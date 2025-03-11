@@ -3,7 +3,7 @@
 #include "claves.h"
 #include <errno.h>
 
-#define MAX 50
+#define MAX 256
 
 // Definición de estructuras dentro del servidor
 struct peticion {
@@ -17,7 +17,7 @@ struct peticion {
 };
 
 
-struct respuesta {
+struct respuesta { //TODO tengo que poner las cosas de manera más específica o como?
     int value;
     char status;
 };
@@ -31,11 +31,10 @@ int main( int argc, char *argv[])
     unsigned int prio;
 
     struct mq_attr attr;
-
     // Configurar atributos de la cola del cliente
     attr.mq_flags = 0;
     attr.mq_maxmsg = 10;
-    attr.mq_msgsize = sizeof(struct respuesta);
+    attr.mq_msgsize = sizeof(p);
     attr.mq_curmsgs = 0;
 
     printf("SERVIDOR: Intentando abrir la cola /SERVIDOR...\n");
@@ -108,7 +107,14 @@ void tratar_peticion ( struct peticion *p )
     }
 
     printf("SERVIDOR: Nombre de la cola de respuesta: %s\n", p->q_name);
-    int qr = mq_open(p->q_name, O_WRONLY);
+    struct mq_attr attr;
+    // Configurar atributos de la cola del cliente
+    attr.mq_flags = 0;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = sizeof(struct respuesta);
+    attr.mq_curmsgs = 0;
+
+    int qr = mq_open(p->q_name, O_WRONLY, &attr);
     if (qr == -1) {
         perror("Error al abrir la cola de respuesta");
         return;

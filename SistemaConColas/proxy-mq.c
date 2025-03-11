@@ -5,7 +5,7 @@
 #include "claves.h"
 #include <errno.h>
 
-#define MAX 50
+#define MAX 256
 
 struct peticion {
     int op;               // Código de operación
@@ -46,6 +46,12 @@ int proxy_operacion(int op, int key, char *value1, int N_value2, double *V_value
     }
     printf("PROXY: /SERVIDOR abierto correctamente\n");
 
+    // Configurar atributos de la cola del cliente
+    attr.mq_flags = 0;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = sizeof(struct respuesta);
+    attr.mq_curmsgs = 0;
+
     int qr = mq_open(qr_name, O_CREAT | O_RDONLY, 0700, &attr);
     if (qr == -1) {
         printf("Error al abrir la cola de respuesta: %s\n", strerror(errno)); // Imprimir mensaje de error
@@ -85,7 +91,7 @@ int proxy_operacion(int op, int key, char *value1, int N_value2, double *V_value
     printf("PROXY: Petición enviada correctamente\n");
 
     // Recibir respuesta
-    if (mq_receive(qr, (char *)&r, sizeof(struct peticion), &prio) == -1) {
+    if (mq_receive(qr, (char *)&r, sizeof(struct respuesta), &prio) == -1) {
         printf("Error al recibir la respuesta: %s\n", strerror(errno)); // Imprimir mensaje de error
         mq_close(qs);
         mq_close(qr);

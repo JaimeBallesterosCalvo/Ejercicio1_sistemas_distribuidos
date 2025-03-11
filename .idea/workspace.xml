@@ -16,13 +16,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc456e0b-7cad-4bdb-96cd-e02eb576e199" name="Changes" comment="da error de message too long, pero como a todos">
+    <list default="true" id="bc456e0b-7cad-4bdb-96cd-e02eb576e199" name="Changes" comment="push hecho en clase">
+      <change afterPath="$PROJECT_DIR$/SistemaCreado/prueba.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/app-cliente.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/app-cliente.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/app-cliente.o" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/app-cliente.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/claves.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/claves.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/claves.o" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/claves.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/cliente" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/cliente" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/libclaves.so" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/libclaves.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/proxy-mq.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/proxy-mq.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/proxy-mq.o" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/proxy-mq.o" afterDir="false" />
@@ -148,7 +146,7 @@
       <option name="presentableId" value="Default" />
       <updated>1741107449868</updated>
       <workItem from="1741107451059" duration="3485000" />
-      <workItem from="1741169687630" duration="36360000" />
+      <workItem from="1741169687630" duration="41598000" />
     </task>
     <task id="LOCAL-00001" summary="ya con todo bien hecho">
       <option name="closed" value="true" />
@@ -190,7 +188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741687036137</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="push hecho en clase">
+      <option name="closed" value="true" />
+      <created>1741712838811</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1741712838811</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,6 +220,7 @@
     <MESSAGE value="con la parte del servidor creada" />
     <MESSAGE value="creado lo del servidor y el cliente" />
     <MESSAGE value="da error de message too long, pero como a todos" />
-    <option name="LAST_COMMIT_MESSAGE" value="da error de message too long, pero como a todos" />
+    <MESSAGE value="push hecho en clase" />
+    <option name="LAST_COMMIT_MESSAGE" value="push hecho en clase" />
   </component>
 </project>
