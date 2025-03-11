@@ -6,6 +6,25 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+char *warehouse_name ="KV";
+int initialized = 0;
+
+int aux_init (void){
+    int ret;
+
+    ret = mkdir("KV", 0700);
+    if (ret <0){
+        perror("mkdir: ");
+        return -1;
+    }
+
+    return 0;
+}
+
+int aux_get_file_name (char *fname, int key){
+    sprintf(fname, "%s/%d", warehouse_name, key);
+    return 0;
+}
 
 int destroy(void)
 {
@@ -24,7 +43,7 @@ int set_value(int key, char *value1, int N_value2, double *V_value2, struct Coor
 {
     char fname[1024];
     sprintf(fname, "./KV/%d", key); // Nombre del archivo = clave
-
+    aux_get_file_name(fname, key);
     FILE *fd = fopen(fname, "w+");
     if (NULL == fd){
         printf("ERROR: fopen de %s\n", fname);
@@ -50,6 +69,7 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2, struct Coo
     char fname[1024];
     sprintf(fname, "./KV/%d", key);
 
+    aux_get_file_name(fname, key);
     FILE *fd = fopen(fname, "r"); // Abre el archivo en modo lectura
     if (NULL == fd){
         printf("ERROR: fopen de %s\n", fname);
@@ -80,7 +100,8 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2, struct C
 
     sprintf(fname, "./KV/%d", key);
 
-    fd = fopen(fname, "r+"); 
+    aux_get_file_name(fname, key);
+    fd = fopen(fname, "r+");
     if (fd == NULL) {
         return -1; /*Error, no existe un elemento con dicha clave*/
     }
@@ -106,6 +127,7 @@ int delete_key(int key) {
     char fname[1024];
 
     sprintf(fname, "./KV/%d", key);
+    aux_get_file_name(fname, key);
 
     if (remove(fname) == 0) {
         return 0;
@@ -119,6 +141,7 @@ int exist(int key) {
     FILE *fd;
 
     sprintf(fname, "./KV/%d", key);
+    aux_get_file_name(fname, key);
 
     // Intentar abrir el archivo en modo lectura ("r")
     fd = fopen(fname, "r");

@@ -1,12 +1,11 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <mqueue.h>
 #include <unistd.h>
 #include "claves.h"
 #include <errno.h>
 
-#define MAX 1024
+#define MAX 50
 
 struct peticion {
     int op;               // Código de operación
@@ -32,15 +31,22 @@ int proxy_operacion(int op, int key, char *value1, int N_value2, double *V_value
     // Generar nombre único para la cola de respuesta
     sprintf(qr_name, "/CLIENTE_%d", getpid());
 
+    struct mq_attr attr; //hay que crear para la hora de crear la cola
+    // Configurar atributos de la cola del cliente
+    attr.mq_flags = 0;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = sizeof(struct peticion);
+    attr.mq_curmsgs = 0;
+
     // Abrir colas de mensajes
-    int qs = mq_open("/SERVIDOR", O_CREAT | O_WRONLY, 0700, NULL);
+    int qs = mq_open("/SERVIDOR", O_CREAT | O_WRONLY, 0700, &attr);
     if (qs == -1) {
         printf("Error al abrir la cola del servidor: %s\n", strerror(errno)); // Imprimir mensaje de error
         return -1;
     }
     printf("PROXY: /SERVIDOR abierto correctamente\n");
 
-    int qr = mq_open(qr_name, O_CREAT | O_RDONLY, 0700, NULL);
+    int qr = mq_open(qr_name, O_CREAT | O_RDONLY, 0700, &attr);
     if (qr == -1) {
         printf("Error al abrir la cola de respuesta: %s\n", strerror(errno)); // Imprimir mensaje de error
         mq_close(qs);
@@ -55,10 +61,21 @@ int proxy_operacion(int op, int key, char *value1, int N_value2, double *V_value
     p.N_value2 = N_value2;
     memcpy(p.V_value2, V_value2, sizeof(double) * N_value2);
     p.coord = coord;
+    printf("PROXY: Nombre de la cola de respuesta: %s\n", qr_name);
     strcpy(p.q_name, qr_name);
 
+    // Imprimir el contenido de la estructura peticion antes de enviarla
+    printf("PROXY: Contenido de peticion antes de enviar:\n");
+    printf("PROXY: op = %d\n", p.op);
+    printf("PROXY: key = %d\n", p.key);
+    printf("PROXY: value1 = %s\n", p.value1);
+    printf("PROXY: N_value2 = %d\n", p.N_value2);
+    printf("PROXY: q_name = %s\n", p.q_name);
+
+
+    printf("PROXY: Tamaño de peticion: %ld\n", sizeof(struct peticion));
     // Enviar petición
-    if (mq_send(qs, (char *)&p, sizeof(struct peticion), 0) == -1) {
+    if (mq_send(qs, (char *)&p, sizeof(p), 0) == -1) {
         printf("PROXY: Error al enviar petición: %s\n", strerror(errno));
         mq_close(qs);
         mq_close(qr);
@@ -68,7 +85,7 @@ int proxy_operacion(int op, int key, char *value1, int N_value2, double *V_value
     printf("PROXY: Petición enviada correctamente\n");
 
     // Recibir respuesta
-    if (mq_receive(qr, (char *)&r, sizeof(struct respuesta), &prio) == -1) {
+    if (mq_receive(qr, (char *)&r, sizeof(struct peticion), &prio) == -1) {
         printf("Error al recibir la respuesta: %s\n", strerror(errno)); // Imprimir mensaje de error
         mq_close(qs);
         mq_close(qr);

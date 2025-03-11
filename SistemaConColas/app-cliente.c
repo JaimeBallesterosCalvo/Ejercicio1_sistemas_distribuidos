@@ -18,11 +18,6 @@ int main (int argc, char **argv)
 
     printf("CLIENTE: Inicializando sistema...\n");
 
-    if (destroy() == -1) {
-        printf("ERROR: No se pudo inicializar el sistema correctamente.\n");
-        return -1; // Salimos con error
-    }
-    printf("CLIENTE: Sistema inicializado correctamente.\n");
 
     int err = set_value(key, v1, 3, v2, v3);
     if (err == -1) {

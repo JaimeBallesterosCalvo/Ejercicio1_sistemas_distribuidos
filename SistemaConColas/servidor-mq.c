@@ -1,12 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <mqueue.h>
-#include <unistd.h>
 #include "claves.h"
 #include <errno.h>
 
-#define MAX 1024
+#define MAX 50
 
 // Definición de estructuras dentro del servidor
 struct peticion {
@@ -29,22 +26,36 @@ void tratar_peticion(struct peticion *p);
 
 int main( int argc, char *argv[])
 {
+    printf("SERVIDOR: Tamaño de peticion: %ld\n", sizeof(struct peticion));
     struct peticion p;
     unsigned int prio;
 
+    struct mq_attr attr;
+
+    // Configurar atributos de la cola del cliente
+    attr.mq_flags = 0;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = sizeof(struct respuesta);
+    attr.mq_curmsgs = 0;
+
     printf("SERVIDOR: Intentando abrir la cola /SERVIDOR...\n");
-    int qs = mq_open("/SERVIDOR", O_CREAT | O_RDONLY, 0700, NULL);
+    int qs = mq_open("/SERVIDOR", O_CREAT | O_RDONLY, 0700, &attr);
     if (qs == -1) {
         perror("Error al abrir la cola del servidor");
         return -1;
     }
 
-    while (1){
+    while(1){
         printf("SERVIDOR: Esperando petición...\n");
-        if (mq_receive(qs, (char *)&p, sizeof(p), &prio)){
-            perror("Error al recibir la petición");
-            continue;
-        }
+        mq_receive(qs, (char *)&p, sizeof(p), &prio);
+
+        printf("SERVIDOR: Petición recibida\n");
+        printf("SERVIDOR: op = %d\n", p.op);
+        printf("SERVIDOR: key = %d\n", p.key);
+        printf("SERVIDOR: value1 = %s\n", p.value1);
+        printf("SERVIDOR: N_value2 = %d\n", p.N_value2);
+        printf("SERVIDOR: q_name = %s\n", p.q_name);
+
         tratar_peticion(&p);
     }
 }
@@ -95,6 +106,8 @@ void tratar_peticion ( struct peticion *p )
             r.status = -1;
             break;
     }
+
+    printf("SERVIDOR: Nombre de la cola de respuesta: %s\n", p->q_name);
     int qr = mq_open(p->q_name, O_WRONLY);
     if (qr == -1) {
         perror("Error al abrir la cola de respuesta");
