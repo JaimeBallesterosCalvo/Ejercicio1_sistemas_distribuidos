@@ -156,9 +156,13 @@ int delete_key(int key) {
     sprintf(fname, "./KV/%d", key);
     aux_get_file_name(fname, key);
 
+    printf("Intentando eliminar el archivo: %s\n", fname);  // Mensaje de depuración
+
     if (remove(fname) == 0) {
+        printf("Archivo eliminado correctamente: %s\n", fname);  // Mensaje de depuración
         return 0;
     } else {
+        perror("Error al eliminar el archivo");  // Mensaje de depuración
         return -1;
     }
 }
@@ -178,13 +182,17 @@ int exist(int key) {
     sprintf(fname, "./KV/%d", key);
     aux_get_file_name(fname, key);
 
+    printf("Intentando abrir el archivo: %s\n", fname);  // Mensaje de depuración
+
     // Intentar abrir el archivo en modo lectura ("r")
     fd = fopen(fname, "r");
     if (fd == NULL) {
+        printf("El archivo no existe: %s\n", fname);  // Mensaje de depuración
         return 0;
     }
 
     fclose(fd);
+    printf("El archivo existe: %s\n", fname);  // Mensaje de depuración
     return 1;
 }
 

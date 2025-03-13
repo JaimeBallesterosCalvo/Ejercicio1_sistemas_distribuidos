@@ -16,11 +16,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc456e0b-7cad-4bdb-96cd-e02eb576e199" name="Changes" comment="push hecho en clase">
-      <change afterPath="$PROJECT_DIR$/SistemaCreado/prueba.cpp" afterDir="false" />
+    <list default="true" id="bc456e0b-7cad-4bdb-96cd-e02eb576e199" name="Changes" comment="tras haber hablado con el profe y antes de ver porque están mal las cosas">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConColas/KV/5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConColas/app-cliente.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/app-cliente.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConColas/app-cliente.o" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/app-cliente.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/claves.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/claves.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/claves.o" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/claves.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConColas/cliente" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/cliente" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/libclaves.so" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/libclaves.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/proxy-mq.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/proxy-mq.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaConColas/proxy-mq.o" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/proxy-mq.o" afterDir="false" />
@@ -74,6 +77,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
     <option name="majorVersion" value="2023" />
@@ -87,24 +93,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Jaime/OneDrive/Escritorio/uni/uni_5_segundo_cuatri/sistemas distribuidos/Ejercicio_evaluable_1/SistemaConColas",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Jaime/OneDrive/Escritorio/uni/uni_5_segundo_cuatri/sistemas distribuidos/Ejercicio_evaluable_1/SistemaConColas&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Jaime\OneDrive\Escritorio\uni\uni_5_segundo_cuatri\sistemas distribuidos\Ejercicio_evaluable_1\SistemaConColas" />
@@ -126,11 +132,6 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Makefile Application.GNUmakefile" />
       <item itemvalue="Makefile Application.Makefile" />
@@ -146,7 +147,8 @@
       <option name="presentableId" value="Default" />
       <updated>1741107449868</updated>
       <workItem from="1741107451059" duration="3485000" />
-      <workItem from="1741169687630" duration="41598000" />
+      <workItem from="1741169687630" duration="43177000" />
+      <workItem from="1741736447823" duration="23327000" />
     </task>
     <task id="LOCAL-00001" summary="ya con todo bien hecho">
       <option name="closed" value="true" />
@@ -196,7 +198,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741712838811</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="tras haber hablado con el profe y antes de ver porque están mal las cosas">
+      <option name="closed" value="true" />
+      <created>1741719848038</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1741719848038</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,6 +231,7 @@
     <MESSAGE value="creado lo del servidor y el cliente" />
     <MESSAGE value="da error de message too long, pero como a todos" />
     <MESSAGE value="push hecho en clase" />
-    <option name="LAST_COMMIT_MESSAGE" value="push hecho en clase" />
+    <MESSAGE value="tras haber hablado con el profe y antes de ver porque están mal las cosas" />
+    <option name="LAST_COMMIT_MESSAGE" value="tras haber hablado con el profe y antes de ver porque están mal las cosas" />
   </component>
 </project>

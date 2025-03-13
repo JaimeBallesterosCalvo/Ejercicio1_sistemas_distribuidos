@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <mqueue.h>
 #include "claves.h"
 #include <errno.h>
@@ -17,16 +18,18 @@ struct peticion {
 };
 
 
-struct respuesta { //TODO tengo que poner las cosas de manera más específica o como?
-    int value;
-    char status;
+struct respuesta {
+    int status;           // Estado de la operación
+    char value1[MAX];     // Valor 1
+    int N_value2;         // Número de valores en V_value2
+    double V_value2[MAX]; // Array de valores 2
+    struct Coord coord;   // Coordenada
 };
 
 void tratar_peticion(struct peticion *p);
 
 int main( int argc, char *argv[])
 {
-    printf("SERVIDOR: Tamaño de peticion: %ld\n", sizeof(struct peticion));
     struct peticion p;
     unsigned int prio;
 
@@ -37,7 +40,7 @@ int main( int argc, char *argv[])
     attr.mq_msgsize = sizeof(p);
     attr.mq_curmsgs = 0;
 
-    printf("SERVIDOR: Intentando abrir la cola /SERVIDOR...\n");
+    printf("SERVIDOR: Abro la cola del /SERVIDOR...\n");
     int qs = mq_open("/SERVIDOR", O_CREAT | O_RDONLY, 0700, &attr);
     if (qs == -1) {
         perror("Error al abrir la cola del servidor");
@@ -51,9 +54,6 @@ int main( int argc, char *argv[])
         printf("SERVIDOR: Petición recibida\n");
         printf("SERVIDOR: op = %d\n", p.op);
         printf("SERVIDOR: key = %d\n", p.key);
-        printf("SERVIDOR: value1 = %s\n", p.value1);
-        printf("SERVIDOR: N_value2 = %d\n", p.N_value2);
-        printf("SERVIDOR: q_name = %s\n", p.q_name);
 
         tratar_peticion(&p);
     }
@@ -62,39 +62,59 @@ int main( int argc, char *argv[])
 void tratar_peticion ( struct peticion *p )
 {
     struct respuesta r ;
+    // Inicializar la respuesta
+    r.status = -1;  // Valor por defecto en caso de error
+    r.value1[0] = '\0';  // Inicializar value1
+    r.N_value2 = 0;  // Inicializar N_value2
+    r.coord = (struct Coord){0, 0};  // Inicializar coord
+    printf("SERVIDOR: Procesando petición...\n");
+    printf("SERVIDOR: Operación solicitada: %d\n", p->op);
 
     switch (p->op) {
         case 0:  // Destroy
+            printf("SERVIDOR: Ejecutando operación DESTROY\n");
             r.status = destroy();
             if (r.status == -1) {
                 perror("Error en destroy()");
             }
             break;
         case 1:  // Set
+            printf("SERVIDOR: Ejecutando operación SET\n");
+            printf("SERVIDOR: key = %d, value1 = %s, N_value2 = %d, coord = (%d, %d)\n",
+                   p->key, p->value1, p->N_value2, p->coord.x, p->coord.y);
             r.status = set_value(p->key, p->value1, p->N_value2, p->V_value2, p->coord);
             if (r.status == -1) {
                 fprintf(stderr, "Error en set_value()\n");
             }
             break;
         case 2:  // Get
-            r.status = get_value(p->key, p->value1, &(p->N_value2), p->V_value2, &(p->coord));
+            printf("SERVIDOR: Ejecutando operación GET\n");
+            printf("SERVIDOR: key = %d\n", p->key);
+            r.status = get_value(p->key, r.value1, &r.N_value2, r.V_value2, &r.coord);
             if (r.status == -1) {
                 fprintf(stderr, "Error en get()\n");
             }
             break;
         case 3:  // Modify
+            printf("SERVIDOR: Ejecutando operación MODIFY\n");
+            printf("SERVIDOR: key = %d, value1 = %s, N_value2 = %d, coord = (%d, %d)\n",
+                   p->key, p->value1, p->N_value2, p->coord.x, p->coord.y);
             r.status = modify_value(p->key, p->value1, p->N_value2, p->V_value2, p->coord);
             if (r.status == -1) {
                 fprintf(stderr, "Error en modify()\n");
             }
             break;
         case 4:  // Delete
+            printf("SERVIDOR: Ejecutando operación DELETE\n");
+            printf("SERVIDOR: key = %d\n", p->key);
             r.status = delete_key(p->key);
             if (r.status == -1) {
                 fprintf(stderr, "Error en delete()\n");
             }
             break;
         case 5:  // Exist
+            printf("SERVIDOR: Ejecutando operación EXIST\n");
+            printf("SERVIDOR: key = %d\n", p->key);
             r.status = exist(p->key);
             if (r.status == -1) {
                 fprintf(stderr, "Error en exist()\n");
@@ -106,7 +126,9 @@ void tratar_peticion ( struct peticion *p )
             break;
     }
 
-    printf("SERVIDOR: Nombre de la cola de respuesta: %s\n", p->q_name);
+    printf("SERVIDOR: Resultado de la operación: status = %d\n", r.status);
+    printf("SERVIDOR: Enviando respuesta al cliente...\n");
+
     struct mq_attr attr;
     // Configurar atributos de la cola del cliente
     attr.mq_flags = 0;
@@ -122,6 +144,19 @@ void tratar_peticion ( struct peticion *p )
 
     if (mq_send(qr, (char*)&r, sizeof(struct respuesta), 0) == -1) {
         perror("Error en mq_send");
-    }mq_close(qr);
+    }
+    else {
+        printf("SERVIDOR: Respuesta enviada correctamente\n");
+        printf("SERVIDOR: Contenido de la respuesta enviada:\n");
+        printf("SERVIDOR: r.status = %d\n", r.status);
+        printf("SERVIDOR: r.value1 = %s\n", r.value1);
+        printf("SERVIDOR: r.N_value2 = %d\n", r.N_value2);
+        for (int i = 0; i < r.N_value2; i++) {
+            printf("SERVIDOR: r.V_value2[%d] = %f\n", i, r.V_value2[i]);
+        }
+        printf("SERVIDOR: r.coord = (%d, %d)\n", r.coord.x, r.coord.y);
+    }
+
+    mq_close(qr);
 }
 
