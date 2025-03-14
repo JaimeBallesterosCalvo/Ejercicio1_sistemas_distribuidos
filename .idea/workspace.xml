@@ -16,26 +16,28 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc456e0b-7cad-4bdb-96cd-e02eb576e199" name="Changes" comment="en principio, va">
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/app-cliente.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/claves.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/claves.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/proxy-mq.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SistemaConcurrente/servidor-mq.c" afterDir="false" />
+    <list default="true" id="bc456e0b-7cad-4bdb-96cd-e02eb576e199" name="Changes" comment="con el proxy cambiando y con un directorio nuevo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/app-cliente.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/app-cliente.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/app-cliente.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/claves.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/cliente" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/libclaves.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/proxy-mq.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/proxy-mq.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/proxy-mq.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/servidor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaConColas/servidor-mq.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConColas/claves.c" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaConColas/claves.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/KV/1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/KV/2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/KV/3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/app-cliente.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/app-cliente.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/claves.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/claves.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/claves.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/cliente" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/libclaves.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/proxy-mq.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/proxy-mq.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/servidor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/servidor-mq.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaConcurrente/servidor-mq.o" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +110,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Jaime/OneDrive/Escritorio/uni/uni_5_segundo_cuatri/sistemas distribuidos/Ejercicio_evaluable_1/SistemaConcurrente",
+    "last_opened_file_path": "C:/Users/Jaime/OneDrive/Escritorio/uni/uni_5_segundo_cuatri/sistemas distribuidos/Ejercicio_evaluable_1/Sistemaconcurrente",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -119,6 +121,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Jaime\OneDrive\Escritorio\uni\uni_5_segundo_cuatri\sistemas distribuidos\Ejercicio_evaluable_1\Sistemaconcurrente" />
       <recent name="C:\Users\Jaime\OneDrive\Escritorio\uni\uni_5_segundo_cuatri\sistemas distribuidos\Ejercicio_evaluable_1\SistemaConcurrente" />
       <recent name="C:\Users\Jaime\OneDrive\Escritorio\uni\uni_5_segundo_cuatri\sistemas distribuidos\Ejercicio_evaluable_1\SistemaConColas" />
     </key>
@@ -155,7 +158,7 @@
       <updated>1741107449868</updated>
       <workItem from="1741107451059" duration="3485000" />
       <workItem from="1741169687630" duration="43177000" />
-      <workItem from="1741736447823" duration="26244000" />
+      <workItem from="1741736447823" duration="32096000" />
     </task>
     <task id="LOCAL-00001" summary="ya con todo bien hecho">
       <option name="closed" value="true" />
@@ -221,7 +224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741869456872</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="con el proxy cambiando y con un directorio nuevo">
+      <option name="closed" value="true" />
+      <created>1741945845036</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1741945845036</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -248,6 +259,7 @@
     <MESSAGE value="push hecho en clase" />
     <MESSAGE value="tras haber hablado con el profe y antes de ver porque están mal las cosas" />
     <MESSAGE value="en principio, va" />
-    <option name="LAST_COMMIT_MESSAGE" value="en principio, va" />
+    <MESSAGE value="con el proxy cambiando y con un directorio nuevo" />
+    <option name="LAST_COMMIT_MESSAGE" value="con el proxy cambiando y con un directorio nuevo" />
   </component>
 </project>
