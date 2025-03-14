@@ -27,73 +27,67 @@ struct respuesta {
     struct Coord coord;   // Coordenada
 };
 
-// Función principal del proxy
-int proxy_operacion(int op, int key, char *value1, int *N_value2, double *V_value2, struct Coord *coord, int *ret_value) {
-    printf("PROXY: Preparando petición para operación %d (key = %d)\n", op, key);
+// Función auxiliar para abrir una cola de mensajes
+mqd_t abrir_cola(const char *nombre, int flags, struct mq_attr *attr) {
+    mqd_t cola = mq_open(nombre, flags, 0700, attr);
+    if (cola == -1) {
+        printf("Error al abrir la cola %s: %s\n", nombre, strerror(errno));
+    }
+    return cola;
+}
+
+// Función auxiliar para enviar una petición
+int enviar_peticion(mqd_t cola, struct peticion *p) {
+    if (mq_send(cola, (char *)p, sizeof(struct peticion), 0) == -1) {
+        printf("Error al enviar petición: %s\n", strerror(errno));
+        return -1;
+    }
+    return 0;
+}
+
+// Función auxiliar para recibir una respuesta
+int recibir_respuesta(mqd_t cola, struct respuesta *r) {
+    unsigned int prio = 0;
+    if (mq_receive(cola, (char *)r, sizeof(struct respuesta), &prio) == -1) {
+        printf("Error al recibir la respuesta: %s\n", strerror(errno));
+        return -1;
+    }
+    return 0;
+}
+
+// Función auxiliar para manejar la lógica común de las operaciones
+int operacion_comun(int op, int key, char *value1, int *N_value2, double *V_value2, struct Coord *coord, int *ret_value) {
     struct peticion p;
     struct respuesta r;
     char qr_name[MAX];
-    unsigned int prio = 0;
+    struct mq_attr attr = {0, 10, sizeof(struct peticion), 0};
 
     // Generar nombre único para la cola de respuesta
-    printf("PROXY: Generando nombre para la cola de respuesta...\n");
     sprintf(qr_name, "/CLIENTE_%d", getpid());
-    printf("PROXY: Nombre de la cola de respuesta: %s\n", qr_name);
-
-    struct mq_attr attr;
-
-    // Configurar atributos para la cola del servidor
-    printf("PROXY: Configurando atributos para la cola del servidor...\n");
-    attr.mq_flags = 0;
-    attr.mq_maxmsg = 10;
-    attr.mq_msgsize = sizeof(struct peticion);
-    attr.mq_curmsgs = 0;
 
     // Abrir cola del servidor
-    printf("PROXY: Abriendo cola del servidor...\n");
-    int qs = mq_open("/SERVIDOR", O_CREAT | O_WRONLY, 0700, &attr);
-    if (qs == -1) {
-        printf("Error al abrir la cola del servidor: %s\n", strerror(errno));
-        return -1;
-    }
-    printf("PROXY: Cola del servidor abierta correctamente.\n");
-
-    // Reinicializar attr para la cola de respuesta
-    printf("PROXY: Configurando atributos para la cola de respuesta...\n");
-    attr.mq_flags = 0;
-    attr.mq_maxmsg = 10;
-    attr.mq_msgsize = sizeof(struct respuesta);
-    attr.mq_curmsgs = 0;
+    mqd_t qs = abrir_cola("/SERVIDOR", O_CREAT | O_WRONLY, &attr);
+    if (qs == -1) return -1;
 
     // Abrir cola de respuesta
-    printf("PROXY: Abriendo cola de respuesta...\n");
-    int qr = mq_open(qr_name, O_CREAT | O_RDONLY, 0700, &attr);
+    attr.mq_msgsize = sizeof(struct respuesta);
+    mqd_t qr = abrir_cola(qr_name, O_CREAT | O_RDONLY, &attr);
     if (qr == -1) {
-        printf("Error al abrir la cola de respuesta: %s\n", strerror(errno));
         mq_close(qs);
         return -1;
     }
-    printf("PROXY: Cola de respuesta abierta correctamente.\n");
 
     // Preparar petición
-    printf("PROXY: Preparando petición...\n");
     p.op = op;
     p.key = key;
-    printf("PROXY: Copiando value1...\n");
-    strcpy(p.value1, value1);
-    printf("PROXY: Copiando N_value2...\n");
+    strncpy(p.value1, value1, MAX);
     p.N_value2 = *N_value2;
-    printf("PROXY: Copiando V_value2...\n");
     memcpy(p.V_value2, V_value2, sizeof(double) * (*N_value2));
-    printf("PROXY: Copiando coord...\n");
     p.coord = *coord;
-    printf("PROXY: Copiando q_name...\n");
-    strcpy(p.q_name, qr_name);
+    strncpy(p.q_name, qr_name, MAX);
 
-    printf("PROXY: Enviando petición para operación %d (key = %d)\n", op, key);
     // Enviar petición
-    if (mq_send(qs, (char *)&p, sizeof(p), 0) == -1) {
-        printf("Error al enviar petición: %s\n", strerror(errno));
+    if (enviar_peticion(qs, &p) == -1) {
         mq_close(qs);
         mq_close(qr);
         mq_unlink(qr_name);
@@ -101,40 +95,17 @@ int proxy_operacion(int op, int key, char *value1, int *N_value2, double *V_valu
     }
 
     // Recibir respuesta
-    if (mq_receive(qr, (char *)&r, sizeof(struct respuesta), &prio) == -1) {
-        printf("Error al recibir la respuesta: %s\n", strerror(errno));
+    if (recibir_respuesta(qr, &r) == -1) {
         mq_close(qs);
         mq_close(qr);
         mq_unlink(qr_name);
         return -1;
     }
 
-    // Manejar la respuesta según la operación
-    if (r.status == -1) {
-        printf("CLIENTE: Error en la operación\n");
-    } else {
-        printf("CLIENTE: Operación exitosa\n");
-        printf("CLIENTE: status = %d\n", r.status);
-        printf("CLIENTE: value1 = %s\n", r.value1);
-        printf("CLIENTE: N_value2 = %d\n", r.N_value2);
-
-        // Mostrar los valores de V_value2
-        if (r.N_value2 > 0) {
-            printf("CLIENTE: Valores de V_value2:\n");
-            for (int i = 0; i < r.N_value2; i++) {
-                printf("CLIENTE: V_value2[%d] = %f\n", i, r.V_value2[i]);
-            }
-        } else {
-            printf("CLIENTE: No hay valores en V_value2\n");
-        }
-
-        printf("CLIENTE: coord = (%d, %d)\n", r.coord.x, r.coord.y);
-    }
-
-    // Manejar la respuesta según la operación
+    // Manejar la respuesta
     *ret_value = r.status;
     if (op == 2) {  // Operación GET
-        strcpy(value1, r.value1);
+        strncpy(value1, r.value1, MAX);
         *N_value2 = r.N_value2;
         if (V_value2 != NULL) {
             memcpy(V_value2, r.V_value2, sizeof(double) * r.N_value2);
@@ -150,96 +121,43 @@ int proxy_operacion(int op, int key, char *value1, int *N_value2, double *V_valu
     return r.status;
 }
 
-// Función auxiliar para operaciones sin datos adicionales
-int proxy_operacion_simple(int op, int key) {
-    printf("PROXY: Preparando petición simple para operación %d (key = %d)\n", op, key);
-    struct peticion p;
-    struct respuesta r;
-    char qr_name[MAX];
-    unsigned int prio = 0;
+// Función auxiliar para operaciones simples
+// lo que hace es dar valores a N_value, V_value2 y las coordenadas, porque si hacemos todas las operaciones juntas
+// nos daba error, asi que esta es la solución que hemos ideado
+int operacion_simple(int op, int key) {
+    char value1[MAX] = "";
+    int N_value2 = 0;
+    double V_value2[MAX] = {0};
+    struct Coord coord = {0, 0};
+    int ret_value;
 
-    // Generar nombre único para la cola de respuesta
-    sprintf(qr_name, "/CLIENTE_%d", getpid());
-
-    struct mq_attr attr;
-    attr.mq_flags = 0;
-    attr.mq_maxmsg = 10;
-    attr.mq_msgsize = sizeof(struct peticion);
-    attr.mq_curmsgs = 0;
-
-    int qs = mq_open("/SERVIDOR", O_CREAT | O_WRONLY, 0700, &attr);
-    if (qs == -1) {
-        printf("Error al abrir la cola del servidor: %s\n", strerror(errno));
-        return -1;
-    }
-
-    attr.mq_msgsize = sizeof(struct respuesta);
-    int qr = mq_open(qr_name, O_CREAT | O_RDONLY, 0700, &attr);
-    if (qr == -1) {
-        printf("Error al abrir la cola de respuesta: %s\n", strerror(errno));
-        mq_close(qs);
-        return -1;
-    }
-
-    p.op = op;
-    p.key = key;
-    strcpy(p.value1, "");
-    p.N_value2 = 0;
-    p.coord.x = 0;
-    p.coord.y = 0;
-    strcpy(p.q_name, qr_name);
-
-    if (mq_send(qs, (char *)&p, sizeof(p), 0) == -1) {
-        printf("Error al enviar petición: %s\n", strerror(errno));
-        mq_close(qs);
-        mq_close(qr);
-        mq_unlink(qr_name);
-        return -1;
-    }
-
-    if (mq_receive(qr, (char *)&r, sizeof(struct respuesta), &prio) == -1) {
-        printf("Error al recibir la respuesta: %s\n", strerror(errno));
-        mq_close(qs);
-        mq_close(qr);
-        mq_unlink(qr_name);
-        return -1;
-    }
-
-    mq_close(qs);
-    mq_close(qr);
-    mq_unlink(qr_name);
-
-    return r.status;
+    return operacion_comun(op, key, value1, &N_value2, V_value2, &coord, &ret_value);
 }
 
-
+// Funciones de la API
 int destroy() {
-    printf("PROXY: destroy() llamada\n");
-    return proxy_operacion_simple(0, 0);
+    return operacion_simple(0, 0);
 }
 
 int set_value(int key, char *value1, int N_value2, double *V_value2, struct Coord coord) {
     int ret_value;
-    return proxy_operacion(1, key, value1, &N_value2, V_value2, &coord, &ret_value);
+    return operacion_comun(1, key, value1, &N_value2, V_value2, &coord, &ret_value);
 }
 
 int get_value(int key, char *value1, int *N_value2, double *V_value2, struct Coord *coord) {
     int ret_value;
-    int status = proxy_operacion(2, key, value1, N_value2, V_value2, coord, &ret_value);
-    return status;
+    return operacion_comun(2, key, value1, N_value2, V_value2, coord, &ret_value);
 }
 
 int modify_value(int key, char *value1, int N_value2, double *V_value2, struct Coord coord) {
     int ret_value;
-    return proxy_operacion(3, key, value1, &N_value2, V_value2, &coord, &ret_value);
+    return operacion_comun(3, key, value1, &N_value2, V_value2, &coord, &ret_value);
 }
 
 int delete_key(int key) {
-    printf("PROXY: delete_key() llamada\n");
-    return proxy_operacion_simple(4, key);
+    return operacion_simple(4, key);
 }
 
 int exist(int key) {
-    printf("PROXY: exist() llamada\n");
-    return proxy_operacion_simple(5, key);
+    return operacion_simple(5, key);
 }
