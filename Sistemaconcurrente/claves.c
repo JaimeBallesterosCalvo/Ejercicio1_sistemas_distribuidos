@@ -38,6 +38,7 @@ int destroy(void) {
 
 int set_value(int key, char *value1, int N_value2, double *V_value2, struct Coord value3) {
     char fname[1024];
+    int ret;
 
     // Verifica si el directorio KV existe, si no, créalo
     if (initialized == 0) {
@@ -46,9 +47,17 @@ int set_value(int key, char *value1, int N_value2, double *V_value2, struct Coor
         }
         initialized = 1;  // Marca como inicializado
     }
-    //TODO meter lo de que existe y que está en rango
 
-    //TODO importante que no se olvide
+    ret = exist(key);
+    if (ret == 1){
+        fprintf(stderr, "ERROR: la key %d ya existe\n", key);
+        return -1;
+    }
+
+    if ((N_value2 <1) || (N_value2 >32)){
+        fprintf(stderr, "ERROR: N_value2 %d está fuera de rango\n", N_value2);
+        return -1;
+    }
 
 
     sprintf(fname, "./KV/%d", key); // Nombre del archivo = clave
@@ -83,6 +92,8 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2, struct Coo
         initialized = 1;  // Marca como inicializado
     }
 
+
+
     sprintf(fname, "./KV/%d", key);
     aux_get_file_name(fname, key);
     FILE *fd = fopen(fname, "r"); // Abre el archivo en modo lectura
@@ -115,10 +126,6 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2, struct C
         initialized = 1;  // Marca como inicializado
     }
 
-    /*Rango de N_value 2*/
-    if (N_value2 < 1 || N_value2 > 32) {
-        return -1;  /*Error, N_value 2 está fuera de rango*/
-    }
 
     sprintf(fname, "./KV/%d", key);
     aux_get_file_name(fname, key);
