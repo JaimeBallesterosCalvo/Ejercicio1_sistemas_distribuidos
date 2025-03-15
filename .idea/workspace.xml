@@ -16,9 +16,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc456e0b-7cad-4bdb-96cd-e02eb576e199" name="Changes" comment="quitan los commits">
+    <list default="true" id="bc456e0b-7cad-4bdb-96cd-e02eb576e199" name="Changes" comment="ya esta hecho la concurrencia">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sistemaconcurrente/servidor-mq.c" beforeDir="false" afterPath="$PROJECT_DIR$/Sistemaconcurrente/servidor-mq.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +139,7 @@
       <workItem from="1741107451059" duration="3485000" />
       <workItem from="1741169687630" duration="43177000" />
       <workItem from="1741736447823" duration="33942000" />
-      <workItem from="1741980187354" duration="3042000" />
+      <workItem from="1741980187354" duration="5348000" />
     </task>
     <task id="LOCAL-00001" summary="ya con todo bien hecho">
       <option name="closed" value="true" />
@@ -246,7 +245,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741965215495</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="ya esta hecho la concurrencia">
+      <option name="closed" value="true" />
+      <created>1741983443623</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1741983443623</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -277,6 +284,7 @@
     <MESSAGE value="vale, la habia liado un poco, ahora ya va de nuevo, falta lo de las cosas" />
     <MESSAGE value="vale, ya esta bien, que habia hecho mal el modify" />
     <MESSAGE value="quitan los commits" />
-    <option name="LAST_COMMIT_MESSAGE" value="quitan los commits" />
+    <MESSAGE value="ya esta hecho la concurrencia" />
+    <option name="LAST_COMMIT_MESSAGE" value="ya esta hecho la concurrencia" />
   </component>
 </project>

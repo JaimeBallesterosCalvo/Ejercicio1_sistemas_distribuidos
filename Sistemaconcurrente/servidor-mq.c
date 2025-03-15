@@ -3,10 +3,14 @@
 #include "claves.h"
 #include <errno.h>
 #include <pthread.h>
+#include <signal.h>
+#include <stdlib.h>
 
 #define MAX 256
 #define TRUE 1
 #define FALSE 0
+
+int qs;
 
 // Definición de estructuras dentro del servidor
 struct peticion {
@@ -31,6 +35,22 @@ struct respuesta {
 pthread_mutex_t sync_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t sync_cond = PTHREAD_COND_INITIALIZER;
 int sync_copied = FALSE;  // Indica si la petición ha sido copiada
+
+
+void limpiar_y_salir(int signum) {
+    printf("\nSERVIDOR: Capturada señal SIGINT (Ctrl+C). Cerrando cola del servidor...\n");
+    if (mq_close(qs) == -1) {
+        perror("Error al cerrar la cola del servidor");
+    } else {
+        printf("SERVIDOR: Cola del servidor cerrada correctamente.\n");
+    }
+    if (mq_unlink("/SERVIDOR") == -1) {
+        perror("Error al desvincular la cola del servidor");
+    } else {
+        printf("SERVIDOR: Cola del servidor desvinculada correctamente.\n");
+    }
+    exit(0);  // Salir del programa
+}
 
 // Función que maneja cada petición en un hilo separado
 void *tratar_peticion(void *arg) {
@@ -155,6 +175,9 @@ int main(int argc, char *argv[]) {
     unsigned int prio;
     pthread_t thid;
     pthread_attr_t attr;
+
+    signal(SIGINT, limpiar_y_salir);
+
 
     // Inicializar atributos del hilo
     pthread_attr_init(&attr);

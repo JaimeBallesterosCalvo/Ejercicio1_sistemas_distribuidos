@@ -1,0 +1,32 @@
+CLIENTE: Iniciando pruebas...
+
+=== Prueba 1: Insertar múltiples claves y verificar su existencia ===
+Clave1 insertada correctamente.
+Clave2 insertada correctamente.
+Clave1 existe.
+Clave2 existe.
+
+=== Prueba 2: Modificar una clave y verificar los cambios ===
+Error al insertar la clave3
+Clave3 modificada correctamente.
+Value1: valor modificado
+N_value2: 2
+V_value2[0]: 7.70
+V_value2[1]: 8.80
+Coordenadas: x = 4, y = 4
+
+=== Prueba 3: Eliminar una clave y verificar su eliminación ===
+Error al insertar la clave4
+Clave4 eliminada correctamente.
+La clave4 fue eliminada correctamente.
+
+=== Prueba 4: Intentar obtener una clave que no existe ===
+Error al obtener la clave5 (como se esperaba, la clave no existe).
+
+=== Prueba 5: Intentar modificar una clave que no existe ===
+Error al modificar la clave6 (como se esperaba, la clave no existe).
+
+=== Prueba 6: Intentar eliminar una clave que no existe ===
+Error al eliminar la clave7 (como se esperaba, la clave no existe).
+
+CLIENTE: Todas las pruebas completadas.
