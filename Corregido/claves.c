@@ -119,9 +119,6 @@ int get_value(int key, char *value1, int *N_value2, double *V_value2, struct Coo
 }
 
 int modify_value(int key, char *value1, int N_value2, double *V_value2, struct Coord value3) {
-    char fname[1024];
-    FILE *fd;
-
     // Verifica si el directorio KV existe, si no, créalo
     if (initialized == 0) {
         if (aux_init() == -1) {
@@ -138,26 +135,13 @@ int modify_value(int key, char *value1, int N_value2, double *V_value2, struct C
         return -1;
     }
 
-    sprintf(fname, "./KV/%d", key);
-    aux_get_file_name(fname, key);
-    fd = fopen(fname, "w");
-    if (fd == NULL) {
-        return -1; /*Error, no existe un elemento con dicha clave*/
+    // Primero eliminamos la clave existente
+    if (delete_key(key) != 0) {
+        return -1;  // Error al eliminar la clave
     }
 
-    fprintf(fd, "%s\n", value1);
-    fprintf(fd, "%d\n", N_value2);
-
-    for (int i = 0; i < N_value2; i++) {
-        fprintf(fd, "%le\n", V_value2[i]);
-    }
-
-    fprintf(fd, "%d\n", value3.x);
-    fprintf(fd, "%d\n", value3.y);
-
-    fclose(fd);
-
-    return 0;
+    // Luego creamos una nueva con los mismos valores (modificados)
+    return set_value(key, value1, N_value2, V_value2, value3);
 }
 
 int delete_key(int key) {

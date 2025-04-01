@@ -63,10 +63,10 @@ int main(int argc, char **argv) {
 
     // Modificar clave
     char *nuevo_v1 = "valor modificado";
-    double nuevo_v2[] = {7.7, 8.8};
+    double nuevo_v2[] = {7.7};
     struct Coord nuevo_v3 = {4, 4};
 
-    err = modify_value(key3, nuevo_v1, 2, nuevo_v2, nuevo_v3);
+    err = modify_value(key3, nuevo_v1, 1, nuevo_v2, nuevo_v3);
     if (err == -1) {
         printf("Error al modificar la clave3\n");
     } else {
